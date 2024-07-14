@@ -1,7 +1,7 @@
 from flask import Blueprint
 from core import db
 from core.apis import decorators,responses
-from .schema import AssignmentSchema
+from .schema import AssignmentSchema, AssignmentGradeSchema
 from core.models.assignments import Assignment, AssignmentStateEnum
 from core.models.teachers import Teacher
 
@@ -15,3 +15,19 @@ def get_all_assigments(r):
     all_assignments = Assignment.get_all_assignments_for_principal()
     all_assignments_dump = AssignmentSchema().dump(all_assignments, many=True)
     return responses.APIResponse.respond(data=all_assignments_dump)
+
+@principal_assignments_resources.route("/assignments/grade", methods=["POST"], strict_slashes=False)
+@decorators.accept_payload
+@decorators.authenticate_principal
+def principal_grades_assignments(p, incoming_payload):
+    """Principal Grades or change grade on assignment"""
+    grade_payload = AssignmentGradeSchema().load(incoming_payload)
+
+    graded_assignment = Assignment.mark_grade(
+        _id=grade_payload.id,
+        grade=grade_payload.grade,
+        auth_principal=p
+    )
+    db.session.commit()
+    graded_assignment_dump = AssignmentSchema().dump(graded_assignment)
+    return responses.APIResponse.respond(data=graded_assignment_dump)
