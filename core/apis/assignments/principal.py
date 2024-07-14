@@ -1,7 +1,7 @@
 from flask import Blueprint
 from core import db
 from core.apis import decorators,responses
-from .schema import AssignmentGradeSchema, AssignmentSchema
+from .schema import AssignmentSchema
 from core.models.assignments import Assignment, AssignmentStateEnum
 from core.models.teachers import Teacher
 
