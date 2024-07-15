@@ -10,7 +10,7 @@
 <br>
 <img src="./assets/op3.png" alt="output image"/>
 <br>
-<img src="./assets/op4.png" alt="output image"/>
+
 
 ## Installation
 
